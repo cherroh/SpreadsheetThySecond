@@ -1,6 +1,5 @@
-
 // search.js
-// Handles searching, filtering, and displaying opponents.
+// Handles opponent searching and displaying opponent cards.
 
 function getSearchFilters() {
     const filters = {};
@@ -8,7 +7,7 @@ function getSearchFilters() {
     document.querySelectorAll("[data-search]").forEach(input => {
         const value = input.value.trim().toLowerCase();
 
-        if (value !== "") {
+        if (value) {
             filters[input.dataset.search] = value;
         }
     });
@@ -16,139 +15,100 @@ function getSearchFilters() {
     return filters;
 }
 
-
-// Find opponents matching every filled search field.
 function filterOpponents() {
     const filters = getSearchFilters();
 
     return opponents.filter(opponent => {
         return Object.entries(filters).every(([column, searchValue]) => {
-
-            const value = String(opponent[column] ?? "").toLowerCase();
-
-            // Partial matching instead of exact matching.
-            return value.includes(searchValue);
+            const opponentValue = String(opponent[column] ?? "").toLowerCase();
+            return opponentValue.includes(searchValue);
         });
     });
 }
 
-
-// Display opponent cards.
 function renderOpponents() {
-    const container = document.getElementById("opponentList");
+    const opponentList = document.getElementById("opponentList");
+    const resultSummary = document.getElementById("resultSummary");
     const emptyState = document.getElementById("emptyState");
     const emptyTitle = document.getElementById("emptyTitle");
     const emptyMessage = document.getElementById("emptyMessage");
-    const summary = document.getElementById("resultSummary");
 
-    if (!container) return;
+    const filteredOpponents = filterOpponents();
+    const hasSearchFilters = Object.keys(getSearchFilters()).length > 0;
 
-    const filtered = filterOpponents();
+    opponentList.innerHTML = "";
 
-    container.innerHTML = "";
+    resultSummary.textContent =
+        `${filteredOpponents.length} opponent${filteredOpponents.length !== 1 ? "s" : ""}`;
 
-    // Update result count.
-    if (summary) {
-        summary.textContent = `${filtered.length} of ${opponents.length} opponents`;
-    }
+    if (filteredOpponents.length === 0) {
+        opponentList.style.display = "none";
+        emptyState.style.display = "block";
 
-    // Show the empty state when there are no results.
-    if (filtered.length === 0) {
-        emptyState?.classList.add("visible");
-
-        if (opponents.length === 0) {
-            if (emptyTitle) emptyTitle.textContent = "No opponents yet";
-
-            if (emptyMessage) {
-                emptyMessage.textContent =
-                    "Add an opponent or import an Excel spreadsheet to get started.";
-            }
+        if (hasSearchFilters) {
+            emptyTitle.textContent = "No opponents found";
+            emptyMessage.textContent = "Try changing or clearing your search filters.";
         } else {
-            if (emptyTitle) emptyTitle.textContent = "No opponents found";
-
-            if (emptyMessage) {
-                emptyMessage.textContent =
-                    "No opponents match your search. Try changing or clearing your filters.";
-            }
+            emptyTitle.textContent = "No opponents yet";
+            emptyMessage.textContent = "Add an opponent to get started.";
         }
 
         renderStats();
         return;
     }
 
-    emptyState?.classList.remove("visible");
+    opponentList.style.display = "grid";
+    emptyState.style.display = "none";
 
-    filtered.forEach(opponent => {
+    filteredOpponents.forEach(opponent => {
+        const card = document.createElement("article");
+        card.className = "opponent-card";
 
-        const result = String(opponent.result || "").toLowerCase();
+        const result = String(opponent.result ?? "").toLowerCase();
 
         let resultClass = "result-none";
 
-        if (result === "win") resultClass = "result-win";
-        if (result === "lose") resultClass = "result-lose";
-        if (result === "draw") resultClass = "result-draw";
-
-        const card = document.createElement("article");
-
-        card.className = "opponent-card";
+        if (result === "win") {
+            resultClass = "result-win";
+        } else if (result === "lose") {
+            resultClass = "result-lose";
+        } else if (result === "draw") {
+            resultClass = "result-draw";
+        }
 
         card.innerHTML = `
             <div class="card-top">
-
-                <div>
-                    <h3 class="opponent-name">
-                        ${escapeHTML(opponent.opponent)}
-                    </h3>
-
-                    <div class="team-name">
-                        ${escapeHTML(opponent["their team"] || "No team recorded")}
-                    </div>
-                </div>
+                <h3 class="opponent-name">
+                    ${escapeHTML(opponent.opponent || "Unnamed opponent")}
+                </h3>
 
                 <span class="result-badge ${resultClass}">
-                    ${escapeHTML(opponent.result || "Unknown")}
+                    ${escapeHTML(opponent.result || "No result")}
                 </span>
-
             </div>
 
-            <div class="card-meta">
+            <div class="card-information">
+                <p>Their team: ${escapeHTML(opponent["their team"] || "—")}</p>
 
-                <span>
-                    🏆 Trophies:
-                    ${escapeHTML(opponent.trophies === "" ? "—" : opponent.trophies)}
-                </span>
+                <p>Weak to: ${escapeHTML(opponent["weak to"] || "—")}</p>
 
-                <span>
-                    ⚔ Team power:
-                    ${escapeHTML(opponent["team power"] === "" ? "—" : opponent["team power"])}
-                </span>
+                <p>Strong against: ${escapeHTML(opponent["strong against"] || "—")}</p>
 
+                <p>Notes: ${escapeHTML(opponent.notes || "—")}</p>
             </div>
-
-            ${opponent.notes ? `
-                <p class="card-notes">
-                    ${escapeHTML(opponent.notes)}
-                </p>
-            ` : ""}
 
             <div class="card-footer">
-
-                <span class="team-hint">
-                    Weak to: ${escapeHTML(opponent["weak to"] || "Unknown")}
-                </span>
-
-                <button class="text-button view-button" type="button">
-                    View details →
+                <button class="text-button" type="button">
+                    View details
                 </button>
-
             </div>
         `;
 
-        card.querySelector(".view-button").addEventListener("click", () => {
+        card.querySelector(".text-button").addEventListener("click", () => {
             openDetails(opponent.id);
         });
 
-        container.appendChild(card);
+        opponentList.appendChild(card);
     });
 
     renderStats();

@@ -51,6 +51,14 @@ there's a form just like for adding/editing an opponent, but it functions like a
 i type in a value, and the application automatically filters and searches for any opponent who has that value
 make it so that the typed in value must be INSIDE or EQUAL TO the value we need to find, it doesn't have to be exact. example: 'aaa' is in aabaaaba so aabaaaba gets search included.
 
+search results/non search result cards should display these only:
+opponent: a string that's the opponent's username
+their team: a string, the arena team they are using described in one word or a phrase
+result: a string, what happened when I fought them? Either win, lose, or draw
+weak to: a string, which team I used to win against them
+strong against: a string, which team I used to lose or draw against them
+notes: a string, can write extra notes about an opponent
+
 color scheme:
 dark theme, black and blue, not too saturated
 rounded buttons

@@ -812,3 +812,24 @@ footer {
     align-items: start;
   }
 }
+
+.card-information {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.card-information p {
+    color: #cbd5e1;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
+}
