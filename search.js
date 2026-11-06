@@ -1,6 +1,31 @@
 // search.js
 // Handles opponent searching and displaying opponent cards.
 
+const PARTIAL_MATCH_FIELDS = [
+    "opponent",
+    "their team",
+    "weak to",
+    "strong against",
+    "notes"
+];
+
+const EXACT_MATCH_FIELDS = [
+    "result",
+    "trophies",
+    "team power",
+    "cookie1",
+    "cookie2",
+    "cookie3",
+    "cookie4",
+    "cookie5"
+];
+
+const TREASURE_FIELDS = [
+    "treasure1",
+    "treasure2",
+    "treasure3"
+];
+
 function getSearchFilters() {
     const filters = {};
 
@@ -19,10 +44,49 @@ function filterOpponents() {
     const filters = getSearchFilters();
 
     return opponents.filter(opponent => {
-        return Object.entries(filters).every(([column, searchValue]) => {
-            const opponentValue = String(opponent[column] ?? "").toLowerCase();
-            return opponentValue.includes(searchValue);
-        });
+        // Partial-match fields.
+        for (const field of PARTIAL_MATCH_FIELDS) {
+            if (filters[field]) {
+                const value = String(opponent[field] ?? "").toLowerCase();
+
+                if (!value.includes(filters[field])) {
+                    return false;
+                }
+            }
+        }
+
+        // Exact-match fields.
+        for (const field of EXACT_MATCH_FIELDS) {
+            if (filters[field]) {
+                const value = String(opponent[field] ?? "").trim().toLowerCase();
+
+                if (value !== filters[field]) {
+                    return false;
+                }
+            }
+        }
+
+        // Every entered treasure search must match at least one
+        // of the opponent's three treasure fields.
+        const treasureSearches = TREASURE_FIELDS
+            .map(field => filters[field])
+            .filter(Boolean);
+
+        const opponentTreasures = TREASURE_FIELDS.map(field =>
+            String(opponent[field] ?? "").toLowerCase()
+        );
+
+        for (const searchValue of treasureSearches) {
+            const found = opponentTreasures.some(treasure =>
+                treasure.includes(searchValue)
+            );
+
+            if (!found) {
+                return false;
+            }
+        }
+
+        return true;
     });
 }
 
@@ -89,11 +153,8 @@ function renderOpponents() {
 
             <div class="card-information">
                 <p>Their team: ${escapeHTML(opponent["their team"] || "—")}</p>
-
                 <p>Weak to: ${escapeHTML(opponent["weak to"] || "—")}</p>
-
                 <p>Strong against: ${escapeHTML(opponent["strong against"] || "—")}</p>
-
                 <p>Notes: ${escapeHTML(opponent.notes || "—")}</p>
             </div>
 

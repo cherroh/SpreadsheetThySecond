@@ -51,6 +51,23 @@ there's a form just like for adding/editing an opponent, but it functions like a
 i type in a value, and the application automatically filters and searches for any opponent who has that value
 make it so that the typed in value must be INSIDE or EQUAL TO the value we need to find, it doesn't have to be exact. example: 'aaa' is in aabaaaba so aabaaaba gets search included.
 
+search values that should contain the value, not an exact match:
+opponent
+their team
+weak to
+strong against
+notes
+
+for treasure1, treasure2, and treasure3, it's different
+if searching for "box", look for substring "box" in all 3 treasures, not just one
+is a many to many mapping
+
+search values that should exactly match the value:
+result
+trophies
+team power
+cookie1 through cookie5
+
 search results/non search result cards should display these only:
 opponent: a string that's the opponent's username
 their team: a string, the arena team they are using described in one word or a phrase
