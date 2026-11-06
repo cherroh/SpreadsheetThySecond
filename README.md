@@ -88,3 +88,9 @@ file layout:
 1 js file for searching opponents
 1 js file for adding opponents
 1 js file for everything else
+
+application access:
+the header password is "mallright" and stays in the browser's localStorage
+so it remains filled after reloading the page
+this is a client-side interface lock, not secure authentication; the password
+is present in the application source and should not be used to protect sensitive data

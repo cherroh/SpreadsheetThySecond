@@ -93,7 +93,12 @@ button {
 
 .header-actions {
   display: flex;
+  align-items: center;
   gap: 9px;
+}
+
+.password-input {
+  width: 140px;
 }
 
 /* Buttons */
@@ -109,6 +114,20 @@ button {
 
 .button:active {
   transform: translateY(1px);
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: .55;
+}
+
+.button:disabled:hover {
+  background: #182337;
+  border-color: var(--border);
+}
+
+.button-primary:disabled:hover {
+  background: var(--blue);
 }
 
 .button-primary {
@@ -717,6 +736,8 @@ footer {
 
   .topbar {
     min-height: 66px;
+    flex-wrap: wrap;
+    padding: 12px 0;
   }
 
   .brand {
@@ -730,6 +751,11 @@ footer {
 
   .header-actions {
     gap: 6px;
+    width: 100%;
+  }
+
+  .password-input {
+    flex: 1;
   }
 
   .header-actions .button {

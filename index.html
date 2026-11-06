@@ -33,18 +33,22 @@
       </a>
 
       <div class="header-actions">
-        <button class="button button-secondary" id="importButton" type="button">
+        <input id="accessPassword" class="password-input" type="password" placeholder="Password"
+          aria-label="Application password" autocomplete="current-password">
+
+        <button class="button button-secondary" id="importButton" type="button" disabled>
           ↑ Import Excel
         </button>
 
-        <button class="button button-primary" id="exportButton" type="button">
+        <button class="button button-primary" id="exportButton" type="button" disabled>
           ↓ Export Excel
         </button>
 
-        <input id="importInput" type="file" accept=".xlsx,.xls" hidden>
+        <input id="importInput" type="file" accept=".xlsx,.xls" hidden disabled>
       </div>
     </header>
 
+    <div id="protectedContent" hidden>
     <main>
 
       <!-- Introduction -->
@@ -215,11 +219,8 @@
       <span>Your data stays in this browser unless you export it.</span>
     </footer>
 
-  </div>
-
-
-  <!-- ADD / EDIT FORM: completely separate from searchForm -->
-  <dialog id="opponentDialog" class="modal">
+    <!-- ADD / EDIT FORM: completely separate from searchForm -->
+    <dialog id="opponentDialog" class="modal">
 
     <form id="opponentForm">
 
@@ -382,11 +383,11 @@
       </div>
 
     </form>
-  </dialog>
+    </dialog>
 
 
   <!-- DETAILS FORM -->
-  <dialog id="detailsDialog" class="modal details-modal">
+    <dialog id="detailsDialog" class="modal details-modal">
 
     <div class="modal-header">
       <div>
@@ -419,11 +420,13 @@
 
     </div>
 
-  </dialog>
+    </dialog>
 
 
   <!-- Notifications -->
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    </div>
+  </div>
 
 </body>
 

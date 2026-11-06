@@ -24,6 +24,8 @@ const COLUMNS = [
 ];
 
 const STORAGE_KEY = "cookieRunArenaOpponents";
+const ACCESS_PASSWORD_STORAGE_KEY = "spreadsheetDoomPassword";
+const ACCESS_PASSWORD = "mallrightweed";
 
 let opponents = [];
 
@@ -525,12 +527,37 @@ function setupEventListeners() {
         .addEventListener("change", importExcel);
 }
 
+function setupPasswordGate() {
+    const passwordInput = document.getElementById("accessPassword");
+    const protectedContent = document.getElementById("protectedContent");
+    const importButton = document.getElementById("importButton");
+    const exportButton = document.getElementById("exportButton");
+    const importInput = document.getElementById("importInput");
+
+    passwordInput.value = localStorage.getItem(ACCESS_PASSWORD_STORAGE_KEY) ?? "";
+
+    const updateAccess = () => {
+        const isUnlocked = passwordInput.value === ACCESS_PASSWORD;
+
+        protectedContent.hidden = !isUnlocked;
+        importButton.disabled = !isUnlocked;
+        exportButton.disabled = !isUnlocked;
+        importInput.disabled = !isUnlocked;
+
+        localStorage.setItem(ACCESS_PASSWORD_STORAGE_KEY, passwordInput.value);
+    };
+
+    passwordInput.addEventListener("input", updateAccess);
+    updateAccess();
+}
+
 
 // Initialize the application.
 document.addEventListener("DOMContentLoaded", () => {
 
     loadFromStorage();
 
+    setupPasswordGate();
     setupEventListeners();
 
     renderOpponents();
