@@ -66,7 +66,10 @@ search values that should exactly match the value:
 result
 trophies
 team power
-cookie1 through cookie5
+
+cookie1 through cookie5 are matched as team members rather than by slot:
+every entered cookie must exactly match a different cookie in the opponent's
+record, and opponent cookies in unsearched slots do not prevent a match.
 
 search results/non search result cards should display these only:
 opponent: a string that's the opponent's username

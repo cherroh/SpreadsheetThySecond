@@ -12,7 +12,10 @@ const PARTIAL_MATCH_FIELDS = [
 const EXACT_MATCH_FIELDS = [
     "result",
     "trophies",
-    "team power",
+    "team power"
+];
+
+const COOKIE_FIELDS = [
     "cookie1",
     "cookie2",
     "cookie3",
@@ -64,6 +67,25 @@ function filterOpponents() {
                     return false;
                 }
             }
+        }
+
+        // Match every searched cookie against any distinct cookie slot.
+        const cookieSearches = COOKIE_FIELDS
+            .map(field => filters[field])
+            .filter(Boolean);
+
+        const opponentCookies = COOKIE_FIELDS
+            .map(field => String(opponent[field] ?? "").trim().toLowerCase())
+            .filter(Boolean);
+
+        for (const searchValue of cookieSearches) {
+            const matchIndex = opponentCookies.indexOf(searchValue);
+
+            if (matchIndex === -1) {
+                return false;
+            }
+
+            opponentCookies.splice(matchIndex, 1);
         }
 
         // Every entered treasure search must match at least one
