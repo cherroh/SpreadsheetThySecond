@@ -74,7 +74,6 @@ function saveOpponent(event) {
     event.preventDefault();
 
     const record = blankOpponent();
-    let invalidNumber = false;
 
     COLUMNS.forEach(column => {
         const input = document.getElementById(
@@ -83,35 +82,8 @@ function saveOpponent(event) {
 
         if (!input) return;
 
-        const value = input.value.trim();
-
-        if (column === "trophies" || column === "team power") {
-            if (value === "") {
-                record[column] = "";
-            } else {
-                const number = Number(value);
-
-                if (!Number.isSafeInteger(number) || number < 0) {
-                    input.setCustomValidity(
-                        "Enter a valid non-negative whole number."
-                    );
-
-                    input.reportValidity();
-                    input.setCustomValidity("");
-                    input.focus();
-
-                    invalidNumber = true;
-                    return;
-                }
-
-                record[column] = number;
-            }
-        } else {
-            record[column] = value;
-        }
+        record[column] = input.value.trim();
     });
-
-    if (invalidNumber) return;
 
     if (!record.opponent) {
         showToast("Opponent username is required.");
@@ -142,4 +114,3 @@ function saveOpponent(event) {
 
     showToast(wasEditing ? "Opponent updated." : "Opponent added.");
 }
-

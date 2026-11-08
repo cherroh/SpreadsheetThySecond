@@ -10,8 +10,8 @@ result: a string, what happened when I fought them? Either win, lose, or draw
 weak to: a string, which team I used to win against them
 strong against: a string, which team I used to lose or draw against them
 notes: a string, can write extra notes about an opponent
-trophies: int, how many trophies they have
-team power: int, how much power their team has
+trophies: text, how many trophies they have (supports decimals or labels)
+team power: text, how much power their team has (supports decimals or labels)
 (for cookie1 through cookie5 i will write an int in a string to show how many promotions thier cookie has)
 cookie1: a string, their frontmost cookie
 cookie2: a string, their 2nd cookie
@@ -35,8 +35,8 @@ exact column names, including spaces:
 4	weak to	Text
 5	strong against	Text
 6	notes	Text
-7	trophies	Integer
-8	team power	Integer
+7	trophies	Text (including decimals or labels)
+8	team power	Text (including decimals or labels)
 9	cookie1	Text
 10	cookie2	Text
 11	cookie3	Text

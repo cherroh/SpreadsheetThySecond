@@ -47,20 +47,6 @@ function blankOpponent() {
 }
 
 
-// Convert numeric values into integers.
-function normalizeNumber(value) {
-    if (value === "" || value === null || value === undefined) {
-        return "";
-    }
-
-    const number = Number(value);
-
-    return Number.isSafeInteger(number) && number >= 0
-        ? number
-        : "";
-}
-
-
 // Normalize an opponent record.
 function normalizeRecord(record) {
     const normalized = blankOpponent();
@@ -68,13 +54,9 @@ function normalizeRecord(record) {
     COLUMNS.forEach(column => {
         const value = record[column];
 
-        if (column === "trophies" || column === "team power") {
-            normalized[column] = normalizeNumber(value);
-        } else {
-            normalized[column] = value === null || value === undefined
-                ? ""
-                : String(value).trim();
-        }
+        normalized[column] = value === null || value === undefined
+            ? ""
+            : String(value).trim();
     });
 
     if (record.id) {
